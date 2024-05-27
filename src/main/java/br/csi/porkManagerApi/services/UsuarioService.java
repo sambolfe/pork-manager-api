@@ -29,13 +29,18 @@ public class UsuarioService {
             Optional<Usuario> isUsuario = usuarioRepository.findByCpf(usuarioDto.cpf());
 
             Usuario.Role role = EnumUtils.stringToEnum(Usuario.Role.class, usuarioDto.role());
-            if(role.name().isBlank()) {
+            if (role.name().isBlank()) {
                 throw new InvalidEnumException("Permissão de usuário Inválida");
+            }
+
+            String cpf = usuarioDto.cpf().replaceAll("\\D", "");
+            if (cpf.length() != 11) {
+                throw new IllegalArgumentException("CPF deve ter 11 números");
             }
 
             Usuario usuario = new Usuario();
             usuario.setNome(usuarioDto.nome().toLowerCase());
-            usuario.setCpf(usuarioDto.cpf().replaceAll("\\D", ""));
+            usuario.setCpf(cpf);
             usuario.setSenha(new BCryptPasswordEncoder().encode(usuarioDto.senha()));
             usuario.setActive(usuarioDto.active());
             usuario.setRole(role);
@@ -52,7 +57,7 @@ public class UsuarioService {
             Optional<Usuario> isUsuario = usuarioRepository.findByCpf(usuarioDto.cpf());
 
             Usuario.Role role = EnumUtils.stringToEnum(Usuario.Role.class, usuarioDto.role());
-            if(role.name().isBlank()) {
+            if (role.name().isBlank()) {
                 throw new InvalidEnumException("Permissão de usuário Inválida");
             }
 
@@ -60,11 +65,17 @@ public class UsuarioService {
                     .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado!"));
 
             BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-            if(!bcrypt.matches(usuarioDto.senha(), usuario.getSenha())) {
+            if (!bcrypt.matches(usuarioDto.senha(), usuario.getSenha())) {
                 usuario.setSenha(bcrypt.encode(usuarioDto.senha()));
             }
 
+            String cpf = usuarioDto.cpf().replaceAll("\\D", "");
+            if (cpf.length() != 11) {
+                throw new IllegalArgumentException("CPF deve ter 11 números");
+            }
+
             usuario.setNome(usuarioDto.nome().toLowerCase());
+            usuario.setCpf(cpf);
             usuario.setActive(usuarioDto.active());
             usuario.setRole(role);
             usuarioRepository.save(usuario);
@@ -73,6 +84,7 @@ public class UsuarioService {
             throw new Exception(e);
         }
     }
+
 
     @Transactional
     public boolean desativarUsuario(Long id) throws Exception {
