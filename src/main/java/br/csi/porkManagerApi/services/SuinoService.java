@@ -145,6 +145,7 @@ public class SuinoService {
                 .orElseThrow(() -> new EntityNotFoundException("Suino não encontrado com a identificação da orelha: " + identificacaoOrelha));
     }
 
+
     public List<Suino> getAllSuinos() {
         return suinoRepository.findAll();
     }

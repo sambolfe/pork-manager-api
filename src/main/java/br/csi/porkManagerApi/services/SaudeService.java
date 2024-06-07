@@ -1,6 +1,7 @@
 package br.csi.porkManagerApi.services;
 
 import br.csi.porkManagerApi.dtos.SaudeDto;
+import br.csi.porkManagerApi.dtos.SaudeResponseDto;
 import br.csi.porkManagerApi.models.Saude;
 import br.csi.porkManagerApi.models.Suino;
 import br.csi.porkManagerApi.repositories.SaudeRepository;
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -90,8 +92,27 @@ public class SaudeService {
         return saudeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Suino não encontrado com o ID: " + id));
     }
-    public List<Saude> getAllSaudes() {
-        return saudeRepository.findAll();
+    @Transactional
+    public List<SaudeResponseDto> getAllSaudes() {
+        List<Saude> saudes = saudeRepository.findAll();
+        List<SaudeResponseDto> saudesResponse = new ArrayList<>();
+
+        for (Saude saude : saudes) {
+            SaudeResponseDto saudeDto = new SaudeResponseDto();
+            saudeDto.setId(saude.getId());
+            saudeDto.setPeso(saude.getPeso());
+            saudeDto.setDataEntradaCio(saude.getDataEntradaCio());
+            saudeDto.setTipoTratamento(saude.getTipoTratamento());
+            saudeDto.setDataInicioTratamento(saude.getDataInicioTratamento());
+            saudeDto.setObservacoes(saude.getObservacoes());
+            saudeDto.setCriadoEm(saude.getCriadoEm());
+            saudeDto.setAtualizadoEm(saude.getAtualizadoEm());
+            saudeDto.setIdentificadorOrelha(saude.getSuino().getIdentificacaoOrelha());
+
+            saudesResponse.add(saudeDto);
+        }
+
+        return saudesResponse;
     }
 
 }
