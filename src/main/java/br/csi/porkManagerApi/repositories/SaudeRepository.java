@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SaudeRepository extends JpaRepository<Saude, Long> {
+
+    boolean existsBySuinoId(Long suinoId);
+
 }

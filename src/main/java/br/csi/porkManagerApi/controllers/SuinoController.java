@@ -79,6 +79,12 @@ public class SuinoController {
         return new ResponseEntity<>(suinos, HttpStatus.OK);
     }
 
+    @GetMapping("/getSuino/{id}")
+    public ResponseEntity<Suino> getSuino(@PathVariable Long id) {
+        Suino suino = suinoService.getSuino(id);
+        return ResponseEntity.ok().body(suino);
+    }
+
     @GetMapping("/getAllIdentificadoresOrelha")
     public ResponseEntity<List<SuinoIdentificadorDto>> getAllIdentificadoresOrelha() {
         List<SuinoIdentificadorDto> identificadoresOrelha = suinoService.getAllIdentificadoresOrelhaComIdSuino();

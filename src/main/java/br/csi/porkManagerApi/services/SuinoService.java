@@ -27,14 +27,19 @@ public class SuinoService {
     private final SuinoRepository suinoRepository;
     private final RacaRepository racaRepository;
     private final UsuarioRepository usuarioRepository;
-    private final AlojamentoRepository alojamentoRepository;  // Adicionando o repositório de Alojamento
+    private final AlojamentoRepository alojamentoRepository;
 
     public SuinoService(SuinoRepository suinoRepository, RacaRepository racaRepository,
                         UsuarioRepository usuarioRepository, AlojamentoRepository alojamentoRepository) {
         this.suinoRepository = suinoRepository;
         this.racaRepository = racaRepository;
         this.usuarioRepository = usuarioRepository;
-        this.alojamentoRepository = alojamentoRepository;  // Inicializando o repositório de Alojamento
+        this.alojamentoRepository = alojamentoRepository;
+    }
+
+    public Suino getSuino(Long id) {
+        return suinoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Suino não encontrado com o ID: " + id));
     }
 
     @Transactional
@@ -121,7 +126,7 @@ public class SuinoService {
             suino.setSexo(sexo);
             suino.setObservacoes(suinoDto.observacoes());
             suino.setTipoSuino(tipoSuino);
-            suino.setAlojamento(alojamento);  // Definindo o alojamento
+            suino.setAlojamento(alojamento);
             suino.setAtualizadoEm(currentDate);
             suino.setUsuario(usuario);
 

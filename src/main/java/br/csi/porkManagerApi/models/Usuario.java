@@ -54,7 +54,7 @@ public class Usuario implements UserDetails {
     @NotNull
     private Boolean active;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Suino> suinos;
 
