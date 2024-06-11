@@ -1,6 +1,8 @@
 package br.csi.porkManagerApi.services;
 
 import br.csi.porkManagerApi.dtos.SuinoDto;
+import br.csi.porkManagerApi.dtos.SuinoIdentificadorDto;
+import br.csi.porkManagerApi.dtos.SuinoResponseDto;
 import br.csi.porkManagerApi.dtos.SuinoUpdateDto;
 import br.csi.porkManagerApi.exceptions.InvalidEnumException;
 import br.csi.porkManagerApi.models.Suino;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SuinoService {
@@ -128,8 +131,6 @@ public class SuinoService {
         }
     }
 
-
-
     @Transactional
     public boolean deletarSuino(Long id) {
         try {
@@ -145,8 +146,33 @@ public class SuinoService {
                 .orElseThrow(() -> new EntityNotFoundException("Suino não encontrado com a identificação da orelha: " + identificacaoOrelha));
     }
 
+    public List<SuinoIdentificadorDto> getAllIdentificadoresOrelhaComIdSuino() {
+        List<Suino> suinos = suinoRepository.findAll();
+        return suinos.stream()
+                .map(suino -> new SuinoIdentificadorDto(suino.getId(), suino.getIdentificacaoOrelha()))
+                .collect(Collectors.toList());
+    }
 
-    public List<Suino> getAllSuinos() {
-        return suinoRepository.findAll();
+    public List<SuinoResponseDto> getAllSuinos() {
+        List<Suino> suinos = suinoRepository.findAll();
+        return suinos.stream()
+                .map(this::mapSuinoToResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    private SuinoResponseDto mapSuinoToResponseDto(Suino suino) {
+        SuinoResponseDto dto = new SuinoResponseDto();
+        dto.setId(suino.getId());
+        dto.setIdRaca(suino.getRaca().getId());
+        dto.setNomeRaca(suino.getRaca().getNome());
+        dto.setIdentificacaoOrelha(suino.getIdentificacaoOrelha());
+        dto.setDataNasc(suino.getDataNasc().toString());
+        dto.setSexo(suino.getSexo().toString());
+        dto.setObservacoes(suino.getObservacoes());
+        dto.setTipoSuino(suino.getTipoSuino().toString());
+        dto.setIdUsuario(suino.getUsuario().getId());
+        dto.setAlojamentoId(suino.getAlojamento().getId());
+        dto.setNomeAlojamento(suino.getAlojamento().getNome());
+        return dto;
     }
 }

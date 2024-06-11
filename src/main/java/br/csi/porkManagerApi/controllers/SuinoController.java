@@ -2,6 +2,8 @@ package br.csi.porkManagerApi.controllers;
 
 
 import br.csi.porkManagerApi.dtos.SuinoDto;
+import br.csi.porkManagerApi.dtos.SuinoIdentificadorDto;
+import br.csi.porkManagerApi.dtos.SuinoResponseDto;
 import br.csi.porkManagerApi.dtos.SuinoUpdateDto;
 import br.csi.porkManagerApi.exceptions.InvalidRequestDataException;
 import br.csi.porkManagerApi.models.Suino;
@@ -72,11 +74,16 @@ public class SuinoController {
     }
 
     @GetMapping("/getAllSuinos")
-    public ResponseEntity<List<Suino>> getAllSuinos() {
-        List<Suino> suinos = suinoService.getAllSuinos();
+    public ResponseEntity<List<SuinoResponseDto>> getAllSuinos() {
+        List<SuinoResponseDto> suinos = suinoService.getAllSuinos();
         return new ResponseEntity<>(suinos, HttpStatus.OK);
     }
 
+    @GetMapping("/getAllIdentificadoresOrelha")
+    public ResponseEntity<List<SuinoIdentificadorDto>> getAllIdentificadoresOrelha() {
+        List<SuinoIdentificadorDto> identificadoresOrelha = suinoService.getAllIdentificadoresOrelhaComIdSuino();
+        return ResponseEntity.ok(identificadoresOrelha);
+    }
     private boolean isValidUpdateDto(SuinoUpdateDto suinoDto) {
         return suinoDto.identificacaoOrelha() != null
                 && !suinoDto.identificacaoOrelha().isBlank()

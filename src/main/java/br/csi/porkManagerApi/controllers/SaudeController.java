@@ -8,6 +8,7 @@ import br.csi.porkManagerApi.models.Suino;
 import br.csi.porkManagerApi.services.SaudeService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,23 @@ public class SaudeController {
     public ResponseEntity<List<SaudeResponseDto>> getAllSaudes() {
         List<SaudeResponseDto> saudeResponseDtos = saudeService.getAllSaudes();
         return new ResponseEntity<>(saudeResponseDtos, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteSaude/{id}")
+    public ResponseEntity<?> deletarSaude(@Valid @PathVariable Long id) throws Exception {
+        try {
+            ResponseEntity<?> response = saudeService.deletarSaude(id);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return ResponseEntity.ok().build(); // Retorna 200 OK se a exclusão for bem-sucedida
+            } else if (response.getStatusCode() == HttpStatus.NOT_FOUND) {
+                return ResponseEntity.notFound().build(); // Retorna 404 Not Found se o registro não for encontrado
+            } else {
+                return ResponseEntity.badRequest().body(response.getBody()); // Retorna 400 Bad Request se ocorrer outro erro
+            }
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest()
+                    .body("Não é possível excluir o alojamento, pois está sendo referenciado por outras entidades.");
+        }
     }
 
     private boolean isValidDto(SaudeDto saudeDto) {

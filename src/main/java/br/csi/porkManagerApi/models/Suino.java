@@ -73,7 +73,7 @@ public class Suino {
     @ManyToOne
     @JsonBackReference
     private Usuario usuario;
-    @OneToMany(mappedBy = "suino",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "suino", fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<Saude> saudes;
 
