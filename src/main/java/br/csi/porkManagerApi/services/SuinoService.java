@@ -176,6 +176,7 @@ public class SuinoService {
         dto.setObservacoes(suino.getObservacoes());
         dto.setTipoSuino(suino.getTipoSuino().toString());
         dto.setIdUsuario(suino.getUsuario().getId());
+        dto.setNomeUsuario(suino.getUsuario().getNome());
         dto.setAlojamentoId(suino.getAlojamento().getId());
         dto.setNomeAlojamento(suino.getAlojamento().getNome());
         return dto;

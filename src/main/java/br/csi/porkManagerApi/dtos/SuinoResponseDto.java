@@ -12,6 +12,16 @@ public class SuinoResponseDto {
     private String observacoes;
     private String tipoSuino;
     private Long idUsuario;
+    private String nomeUsuario;
+
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
+    }
+
     private Long alojamentoId;
     private String nomeAlojamento;
 
