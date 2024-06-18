@@ -1,7 +1,9 @@
 package br.csi.porkManagerApi.repositories;
 
+import br.csi.porkManagerApi.dtos.SuinoResponseDto;
 import br.csi.porkManagerApi.models.Suino;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +16,5 @@ public interface SuinoRepository extends JpaRepository<Suino, Long> {
 
     @Query("SELECT DISTINCT s.identificacaoOrelha FROM Suino s")
     List<String> findAllIdentificadoresOrelha();
+
 }

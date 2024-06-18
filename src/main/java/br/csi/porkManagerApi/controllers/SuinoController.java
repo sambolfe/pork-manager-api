@@ -80,8 +80,8 @@ public class SuinoController {
     }
 
     @GetMapping("/getSuino/{id}")
-    public ResponseEntity<Suino> getSuino(@PathVariable Long id) {
-        Suino suino = suinoService.getSuino(id);
+    public ResponseEntity<SuinoResponseDto> getSuino(@PathVariable Long id) {
+        SuinoResponseDto suino = suinoService.getSuino(id);
         return ResponseEntity.ok().body(suino);
     }
 

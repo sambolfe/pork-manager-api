@@ -2,6 +2,7 @@ package br.csi.porkManagerApi.controllers;
 
 import br.csi.porkManagerApi.dtos.SaudeDto;
 import br.csi.porkManagerApi.dtos.SaudeResponseDto;
+import br.csi.porkManagerApi.dtos.SuinoResponseDto;
 import br.csi.porkManagerApi.exceptions.InvalidRequestDataException;
 import br.csi.porkManagerApi.models.Saude;
 import br.csi.porkManagerApi.models.Suino;
@@ -46,16 +47,11 @@ public class SaudeController {
     }
 
     @GetMapping("/getSaude/{id}")
-    public ResponseEntity<Saude> getSaude(@Valid @PathVariable Long id)  {
-        if (id != null) {
-            Saude res = saudeService.getSaude(id);
-            if (res != null) {
-                return new ResponseEntity<>(res, HttpStatus.OK);
-            }
-            throw new EntityNotFoundException("Registro de Saude não encontrado!");
-        }
-        throw new InvalidRequestDataException("Identificador de saude não encontrado!");
+    public ResponseEntity<SaudeResponseDto> getSuino(@PathVariable Long id) {
+        SaudeResponseDto suino = saudeService.getSaude(id);
+        return ResponseEntity.ok().body(suino);
     }
+
     @GetMapping("/getAllSaudes")
     public ResponseEntity<List<SaudeResponseDto>> getAllSaudes() {
         List<SaudeResponseDto> saudeResponseDtos = saudeService.getAllSaudes();

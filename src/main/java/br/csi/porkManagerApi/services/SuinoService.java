@@ -37,9 +37,23 @@ public class SuinoService {
         this.alojamentoRepository = alojamentoRepository;
     }
 
-    public Suino getSuino(Long id) {
-        return suinoRepository.findById(id)
+    public SuinoResponseDto getSuino(Long id) {
+        var suino = suinoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Suino não encontrado com o ID: " + id));
+        SuinoResponseDto dto = new SuinoResponseDto();
+        dto.setId(suino.getId());
+        dto.setIdRaca(suino.getRaca().getId());
+        dto.setNomeRaca(suino.getRaca().getNome());
+        dto.setIdentificacaoOrelha(suino.getIdentificacaoOrelha());
+        dto.setDataNasc(suino.getDataNasc().toString());
+        dto.setSexo(suino.getSexo().toString());
+        dto.setObservacoes(suino.getObservacoes());
+        dto.setTipoSuino(suino.getTipoSuino().toString());
+        dto.setIdUsuario(suino.getUsuario().getId());
+        dto.setNomeUsuario(suino.getUsuario().getNome());
+        dto.setAlojamentoId(suino.getAlojamento().getId());
+        dto.setNomeAlojamento(suino.getAlojamento().getNome());
+        return dto;
     }
 
     @Transactional
@@ -86,7 +100,6 @@ public class SuinoService {
             throw new Exception(e.getMessage(), e);
         }
     }
-
 
 
     @Transactional

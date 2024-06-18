@@ -1,5 +1,7 @@
 package br.csi.porkManagerApi.dtos;
 
+import lombok.Builder;
+
 import java.util.Date;
 
 public class SuinoResponseDto {

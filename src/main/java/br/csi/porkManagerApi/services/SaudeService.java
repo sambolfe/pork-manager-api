@@ -2,6 +2,7 @@ package br.csi.porkManagerApi.services;
 
 import br.csi.porkManagerApi.dtos.SaudeDto;
 import br.csi.porkManagerApi.dtos.SaudeResponseDto;
+import br.csi.porkManagerApi.dtos.SuinoResponseDto;
 import br.csi.porkManagerApi.models.Alojamento;
 import br.csi.porkManagerApi.models.Saude;
 import br.csi.porkManagerApi.models.Suino;
@@ -93,9 +94,20 @@ public class SaudeService {
         }
     }
 
-    public Saude getSaude(Long id) {
-        return saudeRepository.findById(id)
+    public SaudeResponseDto getSaude(Long id) {
+        var saude = saudeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Suino não encontrado com o ID: " + id));
+        SaudeResponseDto saudeDto = new SaudeResponseDto();
+        saudeDto.setId(saude.getId());
+        saudeDto.setPeso(saude.getPeso());
+        saudeDto.setDataEntradaCio(saude.getDataEntradaCio());
+        saudeDto.setTipoTratamento(saude.getTipoTratamento());
+        saudeDto.setDataInicioTratamento(saude.getDataInicioTratamento());
+        saudeDto.setObservacoes(saude.getObservacoes());
+        saudeDto.setCriadoEm(saude.getCriadoEm());
+        saudeDto.setAtualizadoEm(saude.getAtualizadoEm());
+        saudeDto.setIdentificadorOrelha(saude.getSuino().getIdentificacaoOrelha());
+        return saudeDto;
     }
 
     @Transactional
