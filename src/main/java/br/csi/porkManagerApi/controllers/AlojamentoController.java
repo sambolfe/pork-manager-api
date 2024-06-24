@@ -2,6 +2,7 @@ package br.csi.porkManagerApi.controllers;
 
 
 import br.csi.porkManagerApi.dtos.AlojamentoDto;
+import br.csi.porkManagerApi.dtos.AlojamentoWithNumeroSuinosDto;
 import br.csi.porkManagerApi.models.Alojamento;
 import br.csi.porkManagerApi.services.AlojamentoService;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -63,9 +65,23 @@ public class AlojamentoController {
     }
 
     @GetMapping("/getAllAlojamentos")
-    public ResponseEntity<List<Alojamento>> listarAlojamentos() {
+    public List<AlojamentoWithNumeroSuinosDto> getAllAlojamentos() {
         List<Alojamento> alojamentos = alojamentoService.listarAlojamentos();
-        return new ResponseEntity<>(alojamentos, HttpStatus.OK);
+        List<AlojamentoWithNumeroSuinosDto> dtos = new ArrayList<>();
+
+        for (Alojamento alojamento : alojamentos) {
+            AlojamentoWithNumeroSuinosDto dto = new AlojamentoWithNumeroSuinosDto();
+            dto.setId(alojamento.getId());
+            dto.setNome(alojamento.getNome());
+            dto.setTipo(alojamento.getTipo());
+            dto.setCapacidade(alojamento.getCapacidade());
+            dto.setStatus(alojamento.getStatus());
+            dto.setNumeroSuinosAtual(alojamento.getNumeroSuinosAtual());
+
+            dtos.add(dto);
+        }
+
+        return dtos;
     }
 
 }

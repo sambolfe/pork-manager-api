@@ -1,6 +1,7 @@
 package br.csi.porkManagerApi.models;
 
 import br.csi.porkManagerApi.models.Suino.TipoSuino;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "alojamento")
@@ -54,6 +56,13 @@ public class Alojamento {
     @Column(name = "atualizado_em", nullable = false)
     @NotNull
     private Date atualizadoEm;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "alojamento", fetch = FetchType.EAGER)
+    private Set<Suino> suinos;
+    public int getNumeroSuinosAtual() {
+        return this.suinos != null ? this.suinos.size() : 0;
+    }
 
     public enum StatusAlojamento {
         ATIVO,
